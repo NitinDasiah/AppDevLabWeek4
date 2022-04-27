@@ -1,0 +1,75 @@
+<html>
+<head>
+<style type="text/css">    
+        body{    
+            font-family: "Times New Roman", Times, serif;  
+	    background-image: url("background.jpg");
+        } 
+	center{
+	    border: 5px solid black; 
+	    background: white; 
+            width: 350px;    
+		margin: 20px auto;
+	}   
+        input[type="text"] {    
+            width: 250px; 
+	    background: white;   
+        }    
+        form{    
+            text-align: center;    
+            font-family: "Times New Roman", Times, serif;    
+            font-size: 20px;    
+            border: 5px solid black; 
+	      background: white; 
+            width: 600px;    
+            margin: 20px auto;    
+        }
+	table, th, td, tr {
+  		border: 2px solid black;
+	}    
+</style>    
+<script>
+function showUser(str) {
+    if (str.length == 0) {
+        document.getElementById("User").innerHTML = "";
+        return;
+    } else {
+        var xmlhttp = new XMLHttpRequest();
+        xmlhttp.onreadystatechange = function() {
+           	if (this.readyState == 4 && this.status == 200) {
+                  var i;
+  			var xmlDoc = this.responseXML;
+  			var table="<table><tr><th>UserNumber</th><th>Username</th><th>Address</th></tr>";
+  			var x = xmlDoc.getElementsByTagName("user");
+			var y = xmlDoc.getElementsByTagName("username");
+  			for (i = 0; i <x.length; i++) {
+				var output=y[i].firstChild.nodeValue;
+				if( output == str){
+    					table += "<tr><td>" +
+    					x[i].getElementsByTagName("uno")[0].childNodes[0].nodeValue +
+    					"</td><td>" +
+					x[i].getElementsByTagName("username")[0].childNodes[0].nodeValue +
+    					"</td><td>" +
+    					x[i].getElementsByTagName("address")[0].childNodes[0].nodeValue +
+    					"</td></tr>";
+				}
+  			}
+			table += "</table>";
+  			document.getElementById("User").innerHTML = table;
+            }
+        };
+        xmlhttp.open("GET", "users.xml", true);
+        xmlhttp.send();
+    }
+}
+</script>
+</head>
+<body>
+
+<center><h1 style="color:Red;">National Institute of Technology, Tirchirappalli</h1></center>    
+<form>
+Username: <input type="text" onkeyup="showUser(this.value)">
+</form>
+<center><div id="User"><b>Search for User</b></div></center>
+</body>
+</html>
